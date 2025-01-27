@@ -23,7 +23,7 @@ public class VentilationSystemService {
      * Поиск всех вентиляционных систем
      * @return Все вентиляционные системы
      */
-    public List<VentilationSystem> findAll(PlaceOfWork placeOfWork){return ventilationSystemRepository.findAll(placeOfWork);}
+    public List<VentilationSystem> findAll(PlaceOfWork placeOfWork){return ventilationSystemRepository.findAllByPlaceOfWork(placeOfWork);}
     /**
      * Поиск вентиляционный системы по айди
      * @param id айди

@@ -1,5 +1,6 @@
 package ru.pugovkinv.commissioningofventilationsystems.services;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.Measurements;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class MeasurementsService {
     /**
      * Репозиторий измерений в точке
@@ -23,7 +24,7 @@ public class MeasurementsService {
      * @param point нужная точка
      * @return все измерения
      */
-    public List<Measurements> findAll(Point point){return measurementsRepository.findAll(point);}
+    public List<Measurements> findAll(Point point){return measurementsRepository.findAllByPointId(point);}
 
     /**
      * Поиск измерения по его айди

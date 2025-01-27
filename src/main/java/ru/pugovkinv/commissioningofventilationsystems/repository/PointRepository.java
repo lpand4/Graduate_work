@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PointRepository extends JpaRepository<Point, Long> {
-    List<Point> findAll(VentilationSystem ventilationSystem);
+    List<Point> findAllByVentilationSystem(VentilationSystem ventilationSystem);
 
 }

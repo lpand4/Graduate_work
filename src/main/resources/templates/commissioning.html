@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Программа по наладке вентиляционного оборудования</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+<h1 class="mt-4 md-4 text-center ">Объекты наладки</h1>
+    <div class="container mt-4">
+        <div class="row g-3">
+            <div th:if="${objects.isEmpty()}">
+                <h2> У Вас нет текущих объектов! </h2>
+            </div>
+            <div th:if="${!objects.isEmpty()}">
+                <div th:each="object : ${objects}" class="col-md-6 mb-6">
+                    <div class="card" style="background: #866394; ">
+                        <div class="card-body">
+                            <h2 th:text="${object.nameOfObject}" class="card-title">Название объекта</h2>
+                            <p th:text="${object.addressOfObject}" class="card-text">Адресс.</p>
+                            <div class="btn-group" role="group" aria-label="Простой пример">
+                                <a href="#" class="btn btn-secondary">Посмотреть</a>
+                                <a href="#" class="btn btn-primary">Изменить</a>
+                                <a href="#" class="btn btn-danger">Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col text-center" >
+                <a href="#" class="btn btn-success" style="font-size: xx-large;">Добавить объект</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
+
+<style type="text/css">
+    body { background: #a1c3d1 !important; color: #f2ecf5 !important; }
+</style>

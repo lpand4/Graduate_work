@@ -22,7 +22,7 @@ public class PointService {
      * @param ventilationSystem необходимая вентиляционная система
      * @return все точки измерения
      */
-    public List<Point> findAll(VentilationSystem ventilationSystem){return pointRepository.findAll(ventilationSystem);}
+    public List<Point> findAll(VentilationSystem ventilationSystem){return pointRepository.findAllByVentilationSystem(ventilationSystem);}
 
     /**
      * Поиск точки измерения по айди

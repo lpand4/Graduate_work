@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface VentilationSystemRepository extends JpaRepository<VentilationSystem, Long> {
-    List<VentilationSystem> findAll(PlaceOfWork placeOfWork);
+    List<VentilationSystem> findAllByPlaceOfWork(PlaceOfWork placeOfWork);
 }

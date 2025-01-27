@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/commissioning_of_ventilation_system
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    image: postgres:13.2-alpine
+    environment:
+      POSTGRES_DB: commissioning_of_ventilation_system
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password

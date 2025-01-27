@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Data
-@Table(name = "place_of_work")
+@Table(name = "placeOfWork")
 public class PlaceOfWork {
     /**
      * Уникальный айди объекта
@@ -18,6 +18,14 @@ public class PlaceOfWork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long objectId;
+    /**
+     * Название объекта
+     */
+    private String nameOfObject;
+    /**
+     * Адресс объекта
+     */
+    private String addressOfObject;
     /**
      * Список систем, которые относятся к данному объекту
      */

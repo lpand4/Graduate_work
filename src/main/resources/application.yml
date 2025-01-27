@@ -2,12 +2,16 @@ spring:
   application:
     name: CommissioningOfVentilationSystems
   datasource:
-    url: jdbc:postgresql://localhost:5433/commissioning_of_ventilation_system
-    username: root
+    url: jdbc:postgresql://localhost:5432/commissioning_of_ventilation_system
+    username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yml
+    enabled: true
+    default-schema: commissioning_of_ventilation_system
 
