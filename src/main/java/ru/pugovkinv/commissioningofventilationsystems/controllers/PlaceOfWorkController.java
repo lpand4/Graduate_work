@@ -26,7 +26,6 @@ public class PlaceOfWorkController {
     @GetMapping("/commisioning")
     public String getAllObjects(Model model){
         List<PlaceOfWork> placeOfWorkList = service.findAll();
-        System.out.println(placeOfWorkList);
         model.addAttribute("objects",placeOfWorkList);
         return "commissioning";
     }
