@@ -1,36 +1,39 @@
 --Создание таблицы объектов в случае ее отсутсвия
-CREATE TABLE IF NOT EXISTS placeOfWork
+CREATE TABLE IF NOT EXISTS place_of_work
 (
-    objectId BIGSERIAL PRIMARY KEY,
-    nameOfObject VARCHAR(255) NOT NULL,
-    addressOfObject VARCHAR(255)
+    object_id BIGSERIAL PRIMARY KEY,
+    name_of_object VARCHAR(255) NOT NULL,
+    address_of_object VARCHAR(255)
     );
 --Создание таблицы вентиляционных систем в случае ее отсутсвия
-CREATE TABLE IF NOT EXISTS ventilationSystem
+CREATE TABLE IF NOT EXISTS ventilation_system
 (
-    ventilationSystemId BIGSERIAL PRIMARY KEY,
-    objectId INT REFERENCES placeOfWork (objectId),
-    nameOfSystem VARCHAR(255) NOT NULL,
-    fullAirVolume INT NOT NULL
+    ventilation_system_id BIGSERIAL PRIMARY KEY,
+    object_id INT,
+    FOREIGN KEY (object_id) REFERENCES place_of_work (object_id),
+    name_of_system VARCHAR(255) NOT NULL,
+    full_air_volume INT NOT NULL
     );
 --Создание таблицы точек измерения системы в случае ее отсутсвия
 CREATE TABLE IF NOT EXISTS points
 (
-    pointId BIGSERIAL PRIMARY KEY,
-    ventilationSystemId INT REFERENCES ventilationSystem (ventilationSystemId),
-    nameOfPoint VARCHAR(255) NOT NULL,
-    typeMeasuring VARCHAR(255) NOT NULL,
-    typeOfHole VARCHAR(255) NOT NULL,
-    crossSectionalArea DECIMAL NOT NULL,
-    airVolume DECIMAL NOT NULL,
-    airFlowRate DECIMAL NOT NULL
+    point_id BIGSERIAL PRIMARY KEY,
+    ventilation_system_id INT,
+    FOREIGN KEY (ventilation_system_id) REFERENCES ventilation_system (ventilation_system_id),
+    name_of_point VARCHAR(255) NOT NULL,
+    type_measuring VARCHAR(255) NOT NULL,
+    type_of_hole VARCHAR(255) NOT NULL,
+    cross_sectional_area DECIMAL NOT NULL,
+    air_volume DECIMAL NOT NULL,
+    air_flow_rate DECIMAL NOT NULL
     );
 --Создание таблицы замеров в случае ее отсутсвия
 CREATE TABLE IF NOT EXISTS measurements
 (
-    measurementsId BIGSERIAL PRIMARY KEY,
-    pointId INT REFERENCES points (pointId),
-    nameOfMeasure VARCHAR(255) NOT NULL,
+    measurement_id BIGSERIAL PRIMARY KEY,
+    point_id INT,
+    FOREIGN KEY (point_id) REFERENCES points (point_id),
+    name_of_measure VARCHAR(255) NOT NULL,
     frequency DECIMAL NOT NULL,
-    valueOfMeasure DECIMAL NOT NULL
+    value_of_measure DECIMAL NOT NULL
     );
