@@ -6,5 +6,4 @@ import ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.PlaceOfW
 
 @Repository
 public interface PlaceOfWorkRepository extends JpaRepository<PlaceOfWork, Long> {
-
 }

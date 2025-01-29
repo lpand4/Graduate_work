@@ -20,8 +20,8 @@
                         <p th:text="${object.addressOfObject}" class="card-text">Адресс.</p>
                         <div class="btn-group" role="group" aria-label="Простой пример">
                             <a href="#" class="btn btn-secondary">Посмотреть</a>
-                            <a href="#" class="btn btn-primary">Изменить</a>
-                            <a href="#" class="btn btn-danger">Удалить</a>
+                            <a class="btn btn-primary" th:href="@{/commissioning/objects/update/{objectId}(objectId=${object.objectId})}">Изменить</a>
+                            <a class="btn btn-danger" th:href="@{/commissioning/objects/delete/{objectId}(objectId=${object.objectId})}">Удалить</a>
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
         </div>
         <div class="row mt-4">
             <div class="col text-center" >
-                <a href="#" class="btn btn-success" style="font-size: xx-large;">Добавить объект</a>
+                <a href="/commissioning/objects/add" class="btn btn-success" style="font-size: xx-large;">Добавить объект</a>
             </div>
         </div>
     </div>
@@ -40,5 +40,5 @@
 </html>
 
 <style type="text/css">
-    body { background: #a1c3d1 !important; color: #f2ecf5 !important; }
+    body { background: #a1c3d1 !important; color: #f2ecf5 !important;}
 </style>

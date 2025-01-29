@@ -25,6 +25,7 @@ public class PlaceOfWorkService {
     public List<PlaceOfWork> findAll(){return placeOfWorkRepository.findAll();}
     /**
      * Поиск объекта по айди
+     *
      * @param id айди
      * @return объект найденный по айди
      */
@@ -40,4 +41,7 @@ public class PlaceOfWorkService {
      * @param id айди
      */
     public void deleteById(Long id){ placeOfWorkRepository.deleteById(id);}
+    public void updatePlaceOfWork(PlaceOfWork placeOfWork){
+        placeOfWorkRepository.save(placeOfWork);
+    }
 }
