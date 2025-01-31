@@ -32,15 +32,22 @@ public class PlaceOfWorkService {
     public Optional<PlaceOfWork> findById(Long id){return placeOfWorkRepository.findById(id);}
     /**
      * Добаавление объекта в базу данных
+     *
      * @param placeOfWork новый объект
-     * @return новый объект
      */
-    public PlaceOfWork save(PlaceOfWork placeOfWork){return placeOfWorkRepository.save(placeOfWork);}
+    public void save(PlaceOfWork placeOfWork){
+        placeOfWorkRepository.save(placeOfWork);
+    }
     /**
      * Удаление объекта по айди
      * @param id айди
      */
     public void deleteById(Long id){ placeOfWorkRepository.deleteById(id);}
+
+    /**
+     * Обновление объекта
+     * @param placeOfWork обновленный объект
+     */
     public void updatePlaceOfWork(PlaceOfWork placeOfWork){
         placeOfWorkRepository.save(placeOfWork);
     }

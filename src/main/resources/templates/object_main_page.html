@@ -19,9 +19,17 @@
                         <h2 th:text="${object.nameOfObject}" class="card-title">Название объекта</h2>
                         <p th:text="${object.addressOfObject}" class="card-text">Адресс.</p>
                         <div class="btn-group" role="group" aria-label="Простой пример">
-                            <a href="#" class="btn btn-secondary">Посмотреть</a>
+                            <a class="btn btn-secondary" th:href="@{/commissioning/objects/{objectId}/vents(objectId=${object.objectId})}">Посмотреть</a>
                             <a class="btn btn-primary" th:href="@{/commissioning/objects/update/{objectId}(objectId=${object.objectId})}">Изменить</a>
-                            <a class="btn btn-danger" th:href="@{/commissioning/objects/delete/{objectId}(objectId=${object.objectId})}">Удалить</a>
+                            <div th:if="${object.getVentilationSystems().isEmpty()}">
+                                <a class="btn btn-danger" th:href="@{/commissioning/objects/delete/{objectId}(objectId=${object.objectId})}">Удалить</a>
+                            </div>
+
+                            <!--Изменить кнопку на выпадение модального окна,
+                             где будет предложено отменить действие или форсированно все удалить-->
+                            <div th:unless="${object.getVentilationSystems().isEmpty()}">
+                                <a class="btn btn-danger" th:href="@{/commissioning/objects/{objectId}/vents(objectId=${object.objectId})}">Удалить</a>
+                            </div>
                         </div>
                     </div>
                 </div>

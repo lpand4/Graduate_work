@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Программа по наладке вентиляционного оборудования</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+<h1 class="mt-4 md-4 text-center ">Изменение вент. системы</h1>
+<div class="container mt-4">
+    <form th:method="POST" th:action="@{/commissioning/objects/{objectId}/vents/update(objectId=${object.objectId})}" th:object="${update_vent}">
+        <input type="hidden" th:field="*{ventilationSystemId}" id="ventilationSystemId">
+        <input type="hidden" th:field="*{pointsOfSystem}" id="pointsOfSystem">
+        <div class="row mt-5" style="background: #866394; ">
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-nameOfSystem" style="font-size: xx-large">Наименование вент. системы</span>
+                    <input type="text" th:field="*{nameOfSystem}" id="nameOfSystem" class="form-control" aria-label="Наименование вент. системы" aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5 " style="background: #866394; align-content: center;">
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-fullAirVolume" style="font-size: xx-large">Полный расход воздуха</span>
+                    <input type="text" th:field="*{fullAirVolume}" id="fullAirVolume" class="form-control" aria-label="Полный расход воздуха" aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="btn-group" role="group" aria-label="Простой пример">
+                <a th:href="@{/commissioning/objects/{objectId}/vents(objectId=${object.objectId})}" class="btn btn-secondary btn-lg" style="font-size: x-large">Вернуться назад</a>
+                <button href="#" class="btn btn-primary btn-lg" style="font-size: x-large" type="submit">Изменить вент. систему</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+
+<style type="text/css">
+    body { background: #a1c3d1 !important; color: #f2ecf5 !important;}
+</style>

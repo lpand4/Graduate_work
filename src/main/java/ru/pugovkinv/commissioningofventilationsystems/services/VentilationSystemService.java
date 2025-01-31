@@ -32,13 +32,23 @@ public class VentilationSystemService {
     public Optional<VentilationSystem> findById(Long id){return ventilationSystemRepository.findById(id);}
     /**
      * Сохранение вентиляционной системы
+     *
      * @param ventilationSystem новая вентиляционная система
-     * @return новая вентиляционная система
      */
-    public VentilationSystem save(VentilationSystem ventilationSystem){return ventilationSystemRepository.save(ventilationSystem);}
+    public void save(VentilationSystem ventilationSystem){
+        ventilationSystemRepository.save(ventilationSystem);
+    }
     /**
      * Удаление вентиляционной системы по айди
      * @param id айди
      */
     public void deleteById(Long id){ventilationSystemRepository.deleteById(id);}
+
+    /**
+     * Обновление вент. системы
+     * @param ventilationSystem обновленная вент. система
+     */
+    public void updateVentilationSystem(VentilationSystem ventilationSystem){
+        ventilationSystemRepository.save(ventilationSystem);
+    }
 }
