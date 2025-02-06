@@ -64,6 +64,21 @@ public class CommissioningController {
         placeOfWorkService.deleteById(id);
         return "redirect:/commissioning/objects";
     }
+
+    /**
+     * Форсированное удаление объекта
+     * @param id айди нужного объекта
+     * @return страница с объектами
+     */
+    @GetMapping("/objects/forcedelete/{objectId}")
+    public String forceDeleteObject(@PathVariable("objectId") Long id){
+        PlaceOfWork placeOfWork = placeOfWorkService.findById(id).get();
+        for (VentilationSystem vent: placeOfWork.getVentilationSystems()){
+            ventilationSystemService.deleteById(vent.getVentilationSystemId());
+        }
+        placeOfWorkService.deleteById(id);
+        return "redirect:/commissioning/objects";
+    }
     /**
      * Изменение данных объекта наладки
      * @param id айди необходимого объекта
