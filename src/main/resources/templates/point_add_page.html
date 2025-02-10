@@ -1,10 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Программа по наладке вентиляционного оборудования</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<h1 class="mt-4 md-4 text-center ">Добавление точки измерения</h1>
+<div class="container mt-4">
+    <form th:method="POST"
+          th:action="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points/add(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
+          th:object="${new_point}">
+        <input type="hidden" th:field="*{ventilationSystem}" id="ventilationSystem">
+        <input type="hidden" th:field="*{currentAirFlowRate}" th:value="0" id="currentAirFlowRate">
+        <input type="hidden" th:field="*{currentAirVolume}" th:value="0" id="currentAirVolume">
+        <div class="row mt-5" style="background: #866394; ">
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-nameOfPoint" style="font-size: xx-large">Наименование точки измерения</span>
+                    <input type="text" th:field="*{nameOfPoint}" class="form-control"
+                           aria-label="Наименование точки измерения" aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
 
+
+        <div class="row mt-5" style="background: #866394; ">
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <label class="input-group-text" for="inputGroupSelect01">Тип измерения</label>
+                    <select th:field="*{typeMeasuring}" class="form-select" id="inputGroupSelect01">
+                        <option selected th:value="${type_meas_on}">На решетке</option>
+                        <option th:value="${type_meas_inside}">В канале</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-5" style="background: #866394; ">
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <label class="input-group-text" for="typeOfHole">Тип точки</label>
+                    <select th:field="*{typeOfHole}" class="form-select" id="typeOfHole">
+                        <option th:value="${circular}">Круглая</option>
+                        <option th:value="${rectangular}">Прямоугольная</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="hidden_fields_circ" style="display: block">
+            <div class="row mt-5 " style="background: #866394; align-content: center;">
+                <div class="col mt-3 mb-3">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea1" style="font-size: xx-large">Диаметр</span>
+                        <input type="text" id="diameter" class="form-control" aria-label="Площадь сечения"
+                               aria-describedby="inputGroup-sizing-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hidden_fields_rect" style="display: none">
+            <div class="row mt-5 " style="background: #866394; align-content: center;">
+                <div class="col mt-3 mb-3">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea2" style="font-size: xx-large">Ширина</span>
+                        <input type="text" id="width" class="form-control" aria-label="Ширина"
+                               aria-describedby="inputGroup-sizing-lg">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5 " style="background: #866394; align-content: center;">
+                <div class="col mt-3 mb-3">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea3" style="font-size: xx-large">Высота</span>
+                        <input type="text" id="height" class="form-control" aria-label="Высота"
+                               aria-describedby="inputGroup-sizing-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-5 " style="background: #866394; align-content: center;">
+            <button class="btn btn-success" type="button" onclick="doMath();">Посчитать площадь сечения</button>
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-crossSectionalArea" style="font-size: xx-large">Площадь сечения</span>
+                    <input type="text" id="crossSectionalArea" th:field="*{crossSectionalArea}" th:value="0"
+                           class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
+                           readonly>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-5 " style="background: #866394; align-content: center;">
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-airVolume" style="font-size: xx-large">Объем воздуха по проекту</span>
+                    <input type="text" id="airVolume" th:field="*{airVolume}" class="form-control"
+                           aria-label="Объем воздуха по проекту" aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5 " style="background: #866394; align-content: center;">
+            <button class="btn btn-success" type="button" onclick="doMathAirflow();">Посчитать скорость воздуха</button>
+            <div class="col mt-3 mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-airFlowRate" style="font-size: xx-large">Скорость воздуха по проекту</span>
+                    <input type="text" id="airFlowRate" th:field="*{airFlowRate}" class="form-control"
+                           aria-label="Скорость воздуха по проекту" aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="btn-group" role="group" aria-label="Простой пример">
+                <a th:href="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
+                   class="btn btn-secondary btn-lg" style="font-size: x-large">Вернуться назад</a>
+                <button class="btn btn-success btn-lg" style="font-size: x-large" type="submit">Добавить точку измерения</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+    const selectType = document.querySelector('#typeOfHole')
+    if (selectType) {
+        selectType.addEventListener('change', function () {
+            if (this.value === "CIRCULAR") {
+                $('#hidden_fields_circ').show();
+                $('#hidden_fields_rect').hide();
+            } else {
+                $('#hidden_fields_circ').hide();
+                $('#hidden_fields_rect').show();
+            }
+        })
+    }
+
+    function doMath() {
+        var result;
+        if (selectType.value === "CIRCULAR") {
+            var diameter = diameterInput.value / 1000;
+            result = (3.14 * diameter * diameter) / 4;
+            crossSectionalAreaInput.value = result.toFixed(4);
+        } else {
+            var width = widthInput.value / 1000;
+            var height = heightInput.value / 1000;
+            result = width * height;
+            crossSectionalAreaInput.value = result.toFixed(4);
+        }
+        console.log(result)
+    }
+
+    function doMathAirflow() {
+        var result;
+        airVolume = airVolumeInput.value;
+        crossSectionalArea = crossSectionalAreaInput.value;
+        result = airVolume / (crossSectionalArea * 3600);
+        airFlowRateInput.value = result.toFixed(2);
+        console.log(result)
+    }
+
+    const widthInput = document.getElementById('width');
+    const heightInput = document.getElementById('height');
+    const diameterInput = document.getElementById('diameter');
+    const crossSectionalAreaInput = document.getElementById("crossSectionalArea")
+    const airVolumeInput = document.getElementById("airVolume")
+    const airFlowRateInput = document.getElementById("airFlowRate")
+
+
+</script>
 </body>
 </html>
+
+<style type="text/css">
+    body {
+        background: #a1c3d1 !important;
+        color: #f2ecf5 !important;
+        font-family: 'Montserrat', sans-serif !important;
+    }
+</style>

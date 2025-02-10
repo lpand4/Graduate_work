@@ -21,14 +21,9 @@ public class Measurements {
     @ManyToOne
     private Point pointId;
     /**
-     * Частота частотного преобразователя, при которой проводилось измерение
+     * Примечание к измерению
      */
-    private Double frequency;
-    /**
-     * Название измерения (Например, Измерение 1, 30% открытость клапана)
-     */
-    public String nameOfMeasure;
-
+    private String note;
     /**
      * Значение скорости потока воздуха при данных условиях
      */

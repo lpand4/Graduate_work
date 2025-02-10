@@ -44,5 +44,13 @@ public class PointService {
      */
     public void deleteById(Long id){pointRepository.deleteById(id);}
 
+    /**
+     * Обновление точки измерения
+     * @param point обновленная точка измерения
+     */
+    public void updatePoint(Point point){
+        pointRepository.save(point);
+    }
+
 
 }

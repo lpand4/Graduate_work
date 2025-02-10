@@ -25,7 +25,10 @@ CREATE TABLE IF NOT EXISTS points
     type_of_hole VARCHAR(255) NOT NULL,
     cross_sectional_area DECIMAL NOT NULL,
     air_volume DECIMAL NOT NULL,
-    air_flow_rate DECIMAL NOT NULL
+    air_flow_rate DECIMAL NOT NULL,
+    current_air_flow_rate DECIMAL,
+    current_air_volume DECIMAL,
+    discrepancy DECIMAL
     );
 --Создание таблицы замеров в случае ее отсутсвия
 CREATE TABLE IF NOT EXISTS measurements
@@ -33,7 +36,6 @@ CREATE TABLE IF NOT EXISTS measurements
     measurement_id BIGSERIAL PRIMARY KEY,
     point_id INT,
     FOREIGN KEY (point_id) REFERENCES points (point_id),
-    name_of_measure VARCHAR(255) NOT NULL,
-    frequency DECIMAL NOT NULL,
+    note VARCHAR(255),
     value_of_measure DECIMAL NOT NULL
     );

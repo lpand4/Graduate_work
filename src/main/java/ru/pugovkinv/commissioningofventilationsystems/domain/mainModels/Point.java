@@ -12,10 +12,9 @@ import java.util.List;
  */
 @Entity
 @Inheritance
-@DiscriminatorColumn(name = "typeOfHole")
 @Table(name = "points")
 @Data
-public abstract class Point {
+public class Point {
     /**
      * Уникальное айди точки измерения
      */
@@ -34,11 +33,12 @@ public abstract class Point {
     /**
      * Тип измерения (На решетке или в канале)
      */
+    @Enumerated(EnumType.STRING)
     private TypeMeasuring typeMeasuring;
     /**
      * Тип отвертия измерения (Круглый воздуховод/решетка или прямоугольный)
      */
-    @Column(insertable=false, updatable=false)
+    @Enumerated(EnumType.STRING)
     private TypeOfHole typeOfHole;
     /**
      * Площадь сечения точки измерения (Если круглый, то (3,14*D^2)/4, если прямоугольный, то W*H)
@@ -49,14 +49,26 @@ public abstract class Point {
      */
     private Double airVolume;
     /**
-     * Скорость потока воздуха в точке измерения
+     * Скорость потока воздуха в точке измерения по проекту
      */
     private Double airFlowRate;
+    /**
+     * Текущая скорость потока воздуха в данной точке
+     */
+    private Double currentAirFlowRate;
+    /**
+     * Текущий объем воздуха
+     */
+    private Double currentAirVolume;
+    /**
+     * Расхождение проектного от текущего
+     */
+    private Double discrepancy;
     /**
      * Измерения в данной точке, которые могли происходить при разных условиях
      */
     @OneToMany(mappedBy = "pointId")
-    private List<Measurements> currentAirFlowRate;
+    private List<Measurements> listAirFlowRate;
 
 //    @PrePersist
 //    private void createPoint() {
