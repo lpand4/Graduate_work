@@ -38,8 +38,8 @@
         <div class="row mt-5">
             <div class="btn-group" role="group" aria-label="Простой пример">
                 <a th:href="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
-                   class="btn btn-secondary btn-lg" style="font-size: x-large">Вернуться назад</a>
-                <button class="btn btn-success btn-lg" style="font-size: x-large" type="submit">Добавить измерение</button>
+                   class="btn btn-secondary btn-lg" style="font-size: x-large; font-weight: bold;">Вернуться назад</a>
+                <button class="btn btn-success btn-lg" style="font-size: x-large; font-weight: bold;" type="submit">Добавить измерение</button>
             </div>
         </div>
     </form>
@@ -61,5 +61,12 @@
         background: #a1c3d1 !important;
         color: #f2ecf5 !important;
         font-family: 'Montserrat', sans-serif !important;
+    }
+    h2 {
+        font-weight: bold;
+    }
+
+    h1 {
+        font-weight: bold;
     }
 </style>

@@ -21,7 +21,7 @@
         <div class="row mt-5" style="background: #866394; ">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-nameOfPoint" style="font-size: xx-large">Наименование точки измерения</span>
+                    <span class="input-group-text" id="inputGroup-nameOfPoint" style="font-size: x-large">Наименование точки измерения</span>
                     <input type="text" th:field="*{nameOfPoint}" class="form-control"
                            aria-label="Наименование точки измерения" aria-describedby="inputGroup-sizing-lg">
                 </div>
@@ -32,7 +32,7 @@
         <div class="row mt-5" style="background: #866394; ">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <label class="input-group-text" for="inputGroupSelect01">Тип измерения</label>
+                    <label class="input-group-text" for="inputGroupSelect01" style="font-size: x-large">Тип измерения</label>
                     <select th:field="*{typeMeasuring}" class="form-select" id="inputGroupSelect01">
                         <option selected th:value="${type_meas_on}">На решетке</option>
                         <option th:value="${type_meas_inside}">В канале</option>
@@ -45,7 +45,7 @@
         <div class="row mt-5" style="background: #866394; ">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <label class="input-group-text" for="typeOfHole">Тип точки</label>
+                    <label class="input-group-text" for="typeOfHole" style="font-size: x-large">Тип точки</label>
                     <select th:field="*{typeOfHole}" class="form-select" id="typeOfHole">
                         <option th:value="${circular}">Круглая</option>
                         <option th:value="${rectangular}">Прямоугольная</option>
@@ -58,7 +58,7 @@
             <div class="row mt-5 " style="background: #866394; align-content: center;">
                 <div class="col mt-3 mb-3">
                     <div class="input-group input-group-lg">
-                        <span class="input-group-text" id="inputGroup-crossSectionalArea1" style="font-size: xx-large">Диаметр</span>
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea1" style="font-size: x-large">Диаметр</span>
                         <input type="text" id="diameter" class="form-control" aria-label="Площадь сечения"
                                aria-describedby="inputGroup-sizing-lg">
                     </div>
@@ -70,7 +70,7 @@
             <div class="row mt-5 " style="background: #866394; align-content: center;">
                 <div class="col mt-3 mb-3">
                     <div class="input-group input-group-lg">
-                        <span class="input-group-text" id="inputGroup-crossSectionalArea2" style="font-size: xx-large">Ширина</span>
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea2" style="font-size: x-large">Ширина</span>
                         <input type="text" id="width" class="form-control" aria-label="Ширина"
                                aria-describedby="inputGroup-sizing-lg">
                     </div>
@@ -79,7 +79,7 @@
             <div class="row mt-5 " style="background: #866394; align-content: center;">
                 <div class="col mt-3 mb-3">
                     <div class="input-group input-group-lg">
-                        <span class="input-group-text" id="inputGroup-crossSectionalArea3" style="font-size: xx-large">Высота</span>
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea3" style="font-size: x-large">Высота</span>
                         <input type="text" id="height" class="form-control" aria-label="Высота"
                                aria-describedby="inputGroup-sizing-lg">
                     </div>
@@ -89,10 +89,10 @@
 
 
         <div class="row mt-5 " style="background: #866394; align-content: center;">
-            <button class="btn btn-success" type="button" onclick="doMath();">Посчитать площадь сечения</button>
+            <button class="btn btn-success" type="button" onclick="doMath();" style="font-weight: bold;">Посчитать площадь сечения</button>
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-crossSectionalArea" style="font-size: xx-large">Площадь сечения</span>
+                    <span class="input-group-text" id="inputGroup-crossSectionalArea" style="font-size: x-large">Площадь сечения</span>
                     <input type="text" id="crossSectionalArea" th:field="*{crossSectionalArea}" th:value="0"
                            class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
                            readonly>
@@ -104,27 +104,27 @@
         <div class="row mt-5 " style="background: #866394; align-content: center;">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-airVolume" style="font-size: xx-large">Объем воздуха по проекту</span>
+                    <span class="input-group-text" id="inputGroup-airVolume" style="font-size: x-large">Объем воздуха по проекту</span>
                     <input type="text" id="airVolume" th:field="*{airVolume}" class="form-control"
                            aria-label="Объем воздуха по проекту" aria-describedby="inputGroup-sizing-lg">
                 </div>
             </div>
         </div>
         <div class="row mt-5 " style="background: #866394; align-content: center;">
-            <button class="btn btn-success" type="button" onclick="doMathAirflow();">Посчитать скорость воздуха</button>
+            <button class="btn btn-success" type="button" onclick="doMathAirflow();" style="font-weight: bold;">Посчитать скорость воздуха</button>
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-airFlowRate" style="font-size: xx-large">Скорость воздуха по проекту</span>
+                    <span class="input-group-text" id="inputGroup-airFlowRate" style="font-size: x-large">Скорость воздуха по проекту</span>
                     <input type="text" id="airFlowRate" th:field="*{airFlowRate}" class="form-control"
-                           aria-label="Скорость воздуха по проекту" aria-describedby="inputGroup-sizing-lg">
+                           aria-label="Скорость воздуха по проекту" aria-describedby="inputGroup-sizing-lg" readonly>
                 </div>
             </div>
         </div>
         <div class="row mt-5">
             <div class="btn-group" role="group" aria-label="Простой пример">
                 <a th:href="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
-                   class="btn btn-secondary btn-lg" style="font-size: x-large">Вернуться назад</a>
-                <button class="btn btn-success btn-lg" style="font-size: x-large" type="submit">Добавить точку измерения</button>
+                   class="btn btn-secondary btn-lg" style="font-size: x-large; font-weight: bold;">Вернуться назад</a>
+                <button class="btn btn-success btn-lg" style="font-size: x-large; font-weight: bold;" type="submit">Добавить точку измерения</button>
             </div>
         </div>
     </form>
@@ -192,5 +192,12 @@
         background: #a1c3d1 !important;
         color: #f2ecf5 !important;
         font-family: 'Montserrat', sans-serif !important;
+    }
+    h2 {
+        font-weight: bold;
+    }
+
+    h1 {
+        font-weight: bold;
     }
 </style>

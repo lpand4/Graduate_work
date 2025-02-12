@@ -16,7 +16,7 @@
         <div class="row mt-5" style="background: #866394; ">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-nameOfObject" style="font-size: xx-large">Наименование объекта</span>
+                    <span class="input-group-text" id="inputGroup-nameOfObject" style="font-size: x-large">Наименование объекта</span>
                     <input type="text" th:field="*{nameOfObject}" class="form-control" aria-label="Наименование объекта"
                            aria-describedby="inputGroup-sizing-lg">
                 </div>
@@ -25,7 +25,7 @@
         <div class="row mt-5 " style="background: #866394; align-content: center;">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-addressOfObject" style="font-size: xx-large">Адрес объекта</span>
+                    <span class="input-group-text" id="inputGroup-addressOfObject" style="font-size: x-large">Адрес объекта</span>
                     <input type="text" th:field="*{addressOfObject}" class="form-control" aria-label="Адрес объекта"
                            aria-describedby="inputGroup-sizing-lg">
                 </div>
@@ -33,9 +33,9 @@
         </div>
         <div class="row mt-5">
             <div class="btn-group" role="group" aria-label="Простой пример">
-                <a href="/commissioning/objects" class="btn btn-secondary btn-lg" style="font-size: x-large">Вернуться
+                <a href="/commissioning/objects" class="btn btn-secondary btn-lg" style="font-size: x-large; font-weight: bold;">Вернуться
                     назад</a>
-                <button class="btn btn-success btn-lg" style="font-size: x-large" type="submit">Добавить объект</button>
+                <button class="btn btn-success btn-lg" style="font-size: x-large; font-weight: bold;" type="submit">Добавить объект</button>
             </div>
         </div>
     </form>
@@ -48,5 +48,12 @@
         background: #a1c3d1 !important;
         color: #f2ecf5 !important;
         font-family: 'Montserrat', sans-serif !important;
+    }
+    h2 {
+        font-weight: bold;
+    }
+
+    h1 {
+        font-weight: bold;
     }
 </style>

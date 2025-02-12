@@ -134,9 +134,9 @@
     <div class="row mt-4" id="btnRow">
         <div class="col text-center">
             <a th:href="@{/commissioning/objects/{objectId}/vents(objectId=${object.objectId})}"
-               class="btn btn-secondary btn-lg" style="font-size: x-large">Вернуться к списку вент. систем</a>
+               class="btn btn-secondary btn-lg" style="font-size: x-large; font-weight: bold;">Вернуться к списку вент. систем</a>
             <a th:href="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points/add(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
-               class="btn btn-success" style="font-size: xx-large;">Добавить точку измерения</a>
+               class="btn btn-success" style="font-size: x-large; font-weight: bold;">Добавить точку измерения</a>
         </div>
     </div>
 </div>

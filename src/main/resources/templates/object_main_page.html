@@ -25,11 +25,11 @@
                 Вы уверены, что хотите удалить объект и все данные, принадлежащие этому объекту?
             </div>
             <div class="modal-footer" role="document">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет,
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-weight: bold;">Нет,
                     вернуться назад
                 </button>
                 <a type="submit" class="btn btn-danger" id="forcedeletebtn"
-                   th:href="@{/commissioning/objects/forcedelete/{id}(id='_id_')}">Да,
+                   th:href="@{/commissioning/objects/forcedelete/{id}(id='_id_')}" style="font-weight: bold;">Да,
                     удалить все</a>
             </div>
         </div>
@@ -50,18 +50,18 @@
                     <p th:text="${object.addressOfObject}" class="card-text">Адресс.</p>
                     <div class="btn-group" role="group" aria-label="Простой пример">
                         <a class="btn btn-secondary"
-                           th:href="@{/commissioning/objects/{objectId}/vents(objectId=${object.objectId})}">Посмотреть</a>
+                           th:href="@{/commissioning/objects/{objectId}/vents(objectId=${object.objectId})}" style="font-weight: bold;">Посмотреть</a>
                         <a class="btn btn-primary"
-                           th:href="@{/commissioning/objects/update/{objectId}(objectId=${object.objectId})}">Изменить</a>
+                           th:href="@{/commissioning/objects/update/{objectId}(objectId=${object.objectId})}" style="font-weight: bold;">Изменить</a>
                         <div th:if="${object.getVentilationSystems().isEmpty()}">
                             <a class="btn btn-danger"
-                               th:href="@{/commissioning/objects/delete/{objectId}(objectId=${object.objectId})}">Удалить</a>
+                               th:href="@{/commissioning/objects/delete/{objectId}(objectId=${object.objectId})}" style="font-weight: bold;">Удалить</a>
                         </div>
 
                         <!--Изменить кнопку на выпадение модального окна,
                          где будет предложено отменить действие или форсированно все удалить-->
                         <div th:unless="${object.getVentilationSystems().isEmpty()}">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-id="${object.objectId}">Удалить</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" th:data-bs-id="${object.objectId}" style="font-weight: bold;">Удалить</button>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
     </div>
     <div class="row mt-4">
         <div class="col text-center">
-            <a href="/commissioning/objects/add" class="btn btn-success" style="font-size: xx-large;">Добавить
+            <a href="/commissioning/objects/add" class="btn btn-success" style="font-size: xx-large; font-weight: bold;">Добавить
                 объект</a>
         </div>
     </div>
@@ -100,5 +100,19 @@ if (exampleModal) {
         background: #a1c3d1 !important;
         color: #f2ecf5 !important;
         font-family: 'Montserrat', sans-serif !important;
+    }
+    h2 {
+        font-weight: bold;
+    }
+
+    h1 {
+        font-weight: bold;
+    }
+    p {
+        font-size: larger;
+        font-weight: bold;
+        font-family: 'Montserrat', sans-serif;
+        color: #f2ecf5
+
     }
 </style>

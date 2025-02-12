@@ -25,11 +25,11 @@
                 Вы уверены, что хотите удалить вент. систему и все данные, принадлежащие этому объекту?
             </div>
             <div class="modal-footer" role="document">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет,
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-weight: bold;">Нет,
                     вернуться назад
                 </button>
                 <a type="submit" class="btn btn-danger" id="forcedeletebtn"
-                   th:href="@{/commissioning/objects/forcedelete/{id}(id='_id_')}">Да,
+                   th:href="@{/commissioning/objects/forcedelete/{id}(id='_id_')}" style="font-weight: bold;">Да,
                     удалить все</a>
             </div>
         </div>
@@ -48,26 +48,32 @@
                 <div class="card-body">
                     <h2 th:text="${vent.nameOfSystem}" class="card-title">Название вент. системы</h2>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-7">
                             <p class="card-text">Полный объем воздуха: </p>
                         </div>
-                        <div class="col">
+                        <div class="col-md-3">
                             <p th:text="${vent.fullAirVolume}" class="card-text">Полный расход объема воздуха.</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="card-text">м3/ч</p>
                         </div>
                     </div>
                     <div class="btn-group" role="group" aria-label="Простой пример">
                         <a class="btn btn-secondary"
-                           th:href="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}">Посмотреть</a>
+                           th:href="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
+                           style="font-weight: bold;">Посмотреть</a>
                         <a class="btn btn-primary"
-                           th:href="@{/commissioning/objects/{objectId}/vents/update/{ventilationSystemId}(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}">Изменить</a>
+                           th:href="@{/commissioning/objects/{objectId}/vents/update/{ventilationSystemId}(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
+                           style="font-weight: bold;">Изменить</a>
                         <div th:if="${vent.getPointsOfSystem().isEmpty()}">
                             <a class="btn btn-danger"
-                               th:href="@{/commissioning/objects/{objectId}/vents/delete/{ventilationSystemId}(ventilationSystemId=${vent.ventilationSystemId}, objectId=${object.objectId})}">Удалить</a>
+                               th:href="@{/commissioning/objects/{objectId}/vents/delete/{ventilationSystemId}(ventilationSystemId=${vent.ventilationSystemId}, objectId=${object.objectId})}"
+                               style="font-weight: bold;">Удалить</a>
                         </div>
                         <div th:unless="${vent.getPointsOfSystem().isEmpty()}">
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal" th:data-bs-obj-id="${object.objectId}"
-                                    th:data-bs-vent-id="${vent.ventilationSystemId}">Удалить
+                                    th:data-bs-vent-id="${vent.ventilationSystemId}" style="font-weight: bold;">Удалить
                             </button>
                         </div>
                     </div>
@@ -77,10 +83,10 @@
     </div>
     <div class="row mt-4">
         <div class="col text-center">
-            <a th:href="@{/commissioning/objects}" class="btn btn-secondary btn-lg" style="font-size: x-large">Вернуться
+            <a th:href="@{/commissioning/objects}" class="btn btn-secondary btn-lg" style="font-size: x-large; font-weight: bold;">Вернуться
                 к списку объектов</a>
             <a th:href="@{/commissioning/objects/{objectId}/vents/add(objectId=${object.objectId})}"
-               class="btn btn-success" style="font-size: xx-large;">Добавить вент.систему</a>
+               class="btn btn-success" style="font-size: x-large; font-weight: bold;">Добавить вент.систему</a>
         </div>
     </div>
 </div>
@@ -114,5 +120,19 @@
         background: #a1c3d1 !important;
         color: #f2ecf5 !important;
         font-family: 'Montserrat', sans-serif !important;
+    }
+    h2 {
+        font-weight: bold;
+    }
+
+    h1 {
+        font-weight: bold;
+    }
+    p {
+        font-size: larger;
+        font-weight: bold;
+        font-family: 'Montserrat', sans-serif;
+        color: #f2ecf5
+
     }
 </style>
