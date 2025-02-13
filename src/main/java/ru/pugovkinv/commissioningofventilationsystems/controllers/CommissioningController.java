@@ -15,8 +15,6 @@ import ru.pugovkinv.commissioningofventilationsystems.services.PlaceOfWorkServic
 import ru.pugovkinv.commissioningofventilationsystems.services.PointService;
 import ru.pugovkinv.commissioningofventilationsystems.services.VentilationSystemService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -29,15 +27,31 @@ public class CommissioningController {
     private final PointService pointService;
     private final MeasurementsService measurementsService;
 
+    /**
+     * Компаратор для сортировки точек измерения по названию
+     */
     public static Comparator<Point> pointNameComparator = new Comparator<Point>() {
+        /**
+         * Проверка строки на то, является ли она числом
+         * @param str входная строка
+         * @return да/нет
+         */
         public static boolean isDigit(String str) {
             try {
                 Double.parseDouble(str);
                 return true;
-            } catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 return false;
             }
         }
+
+        /**
+         * Сравнение по названию, если в названии не числа,
+         * то это выигрышная позиция, остальные числа по возрастанию
+         * @param o1 the first object to be compared.
+         * @param o2 the second object to be compared.
+         * @return выигрышный объект
+         */
         @Override
         public int compare(Point o1, Point o2) {
             if (isDigit(o1.getNameOfPoint()) && isDigit(o2.getNameOfPoint())) {
@@ -48,12 +62,11 @@ public class CommissioningController {
                 } else if (Integer.parseInt(o1.getNameOfPoint()) == Integer.parseInt(o2.getNameOfPoint())) {
                     return 0;
                 }
-            }else if (isDigit(o1.getNameOfPoint()) && !isDigit(o2.getNameOfPoint())){
+            } else if (isDigit(o1.getNameOfPoint()) && !isDigit(o2.getNameOfPoint())) {
                 return 1;
-            }else if (isDigit(o2.getNameOfPoint()) && !isDigit(o1.getNameOfPoint())){
+            } else if (isDigit(o2.getNameOfPoint()) && !isDigit(o1.getNameOfPoint())) {
                 return -1;
-            }
-            else {
+            } else {
                 return 0;
             }
             return 0;
@@ -159,6 +172,7 @@ public class CommissioningController {
         return "redirect:/commissioning/objects";
     }
     //endregion
+
     // region Код под тип VentilationSystem
 
 
@@ -353,6 +367,14 @@ public class CommissioningController {
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
 
+    /**
+     * Форсированое удаление точки измерения и всех ее измерений
+     *
+     * @param objectId            айди объекта
+     * @param ventilationSystemId айди вент. системы
+     * @param pointId             айди точки измерения
+     * @return страницу со списком точек измерения
+     */
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/forcedelete/{pointId}")
     public String forceDeletePoint(@PathVariable("objectId") Long objectId,
                                    @PathVariable("ventilationSystemId") Long ventilationSystemId,
@@ -365,6 +387,15 @@ public class CommissioningController {
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
 
+    /**
+     * Изменение точки измерения
+     *
+     * @param objectId            айди объекта
+     * @param ventilationSystemId айди вент. системы
+     * @param pointId             айди точки измерения
+     * @param model               модель
+     * @return страницу с изменением точки измерения
+     */
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/update/{pointId}")
     public String updatePoint(@PathVariable("objectId") Long objectId,
                               @PathVariable("ventilationSystemId") Long ventilationSystemId,
@@ -383,7 +414,14 @@ public class CommissioningController {
         return "point_update_page";
     }
 
-
+    /**
+     * Изменение точки измерения
+     *
+     * @param objectId            айди объекта
+     * @param ventilationSystemId айди вент. системы
+     * @param updatedPoint        измененная точка измерения
+     * @return возвращает на страницу с точками измерения
+     */
     @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/update")
     public String updatePoint(@PathVariable("objectId") Long objectId,
                               @PathVariable("ventilationSystemId") Long ventilationSystemId,
@@ -394,13 +432,20 @@ public class CommissioningController {
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
 
-    //endregion
-
+    /**
+     * Просмотр одной точки измерения целиком
+     *
+     * @param objectId            айди объекта
+     * @param ventilationSystemId айди вент. системы
+     * @param pointId             айди точки измерения
+     * @param model               модель
+     * @return страницу с просмотром одной точки измерения
+     */
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}")
     public String getOnePoint(@PathVariable("objectId") Long objectId,
                               @PathVariable("ventilationSystemId") Long ventilationSystemId,
                               @PathVariable Long pointId,
-                              Model model){
+                              Model model) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
         Point point = pointService.findById(pointId).get();
@@ -414,6 +459,19 @@ public class CommissioningController {
         return "point_page";
     }
 
+    //endregion
+
+    //region Код для типа данных Measurments
+
+    /**
+     * Добавление измерения
+     *
+     * @param objectId            айди объекта
+     * @param ventilationSystemId айди вент. системы
+     * @param pointId             айди точки измерения
+     * @param model               модель
+     * @return страницу с добавлением измерения
+     */
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}/add")
     public String addMeasure(@PathVariable("objectId") Long objectId,
                              @PathVariable("ventilationSystemId") Long ventilationSystemId,
@@ -429,6 +487,15 @@ public class CommissioningController {
         return "measure_add_page";
     }
 
+    /**
+     * Добавление измерения
+     *
+     * @param objectId            айди объекта
+     * @param ventilationSystemId айди вент. системы
+     * @param pointId             айди точки измерения
+     * @param newMeasure          новое измерение
+     * @return возвращает на страницу с точками измерения
+     */
     @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}/add")
     public String addMeasure(@PathVariable Long objectId, @PathVariable Long ventilationSystemId,
                              @PathVariable Long pointId, @ModelAttribute("new_meas") Measurements newMeasure) {
@@ -449,6 +516,6 @@ public class CommissioningController {
         placeOfWorkService.updatePlaceOfWork(mainObject);
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
-
+    //endregion
 
 }
