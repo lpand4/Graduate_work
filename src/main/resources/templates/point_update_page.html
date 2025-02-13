@@ -30,6 +30,16 @@
             <input type="hidden" th:field="*{currentAirFlowRate}">
         </div>
 
+        <div class="alert alert-warning" role="alert" id="alert" style="display: block">
+            <div><strong>
+                 Поля выделенные красным цветом - закреплены.
+                Для того чтобы их изменить, удалите данную точку и
+                пересоздайте с верными значениями </strong>
+            </div>
+        </div>
+
+
+
         <div class="row mt-5" style="background: #866394; ">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
@@ -44,12 +54,12 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg" th:if="${update_point.typeMeasuring} ==${type_meas_on}">
                     <span class="input-group-text" id="inputGroup-typeMeas" style="font-size: xx-large">Тип измерения</span>
-                    <input type="text" value="На решетке" class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
+                    <input type="text" value="На решетке" class="form-control" style="background: #F08080" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
                            readonly>
                 </div>
                 <div class="input-group input-group-lg" th:unless="${update_point.typeMeasuring} ==${type_meas_on}">
                     <span class="input-group-text" id="inputGroup-typeMeas2" style="font-size: xx-large">Тип измерения</span>
-                    <input type="text" value="Внтури канала" class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
+                    <input type="text" value="Внтури канала" class="form-control" style="background: #F08080" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
                            readonly>
                 </div>
             </div>
@@ -59,12 +69,12 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg" th:if="${update_point.typeOfHole} ==${circular}">
                     <span class="input-group-text" id="inputGroup-typeOfHole" style="font-size: xx-large">Тип точки</span>
-                    <input type="text" value="Круглый" class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
+                    <input type="text" value="Круглый" class="form-control" style="background: #F08080" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
                            readonly>
                 </div>
                 <div class="input-group input-group-lg" th:unless="${update_point.typeOfHole} ==${circular}">
                     <span class="input-group-text" id="inputGroup-typeOfHole2" style="font-size: xx-large">Тип точки</span>
-                    <input type="text" value="Прямоугольный" class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
+                    <input type="text" value="Прямоугольный" class="form-control" style="background: #F08080" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
                            readonly>
                 </div>
             </div>
@@ -72,8 +82,8 @@
         <div class="row mt-5 " style="background: #866394; align-content: center;">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-crossSectionalArea" style="font-size: x-large">Площадь сечения</span>
-                    <input type="text" id="crossSectionalArea" th:field="*{crossSectionalArea}"
+                    <span class="input-group-text" id="inputGroup-crossSectionalArea" style="font-size: x-large;">Площадь сечения</span>
+                    <input type="text" id="crossSectionalArea" style="background: #F08080" th:field="*{crossSectionalArea}"
                            class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
                            readonly>
                 </div>
@@ -155,5 +165,12 @@
 
     h1 {
         font-weight: bold;
+    }
+    p {
+        font-size: larger;
+        font-weight: bold;
+        font-family: 'Montserrat', sans-serif;
+        color: black;
+
     }
 </style>
