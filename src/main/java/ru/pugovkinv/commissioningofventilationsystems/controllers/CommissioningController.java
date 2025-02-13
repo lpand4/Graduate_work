@@ -15,6 +15,9 @@ import ru.pugovkinv.commissioningofventilationsystems.services.PlaceOfWorkServic
 import ru.pugovkinv.commissioningofventilationsystems.services.PointService;
 import ru.pugovkinv.commissioningofventilationsystems.services.VentilationSystemService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -25,6 +28,38 @@ public class CommissioningController {
     private final VentilationSystemService ventilationSystemService;
     private final PointService pointService;
     private final MeasurementsService measurementsService;
+
+    public static Comparator<Point> pointNameComparator = new Comparator<Point>() {
+        public static boolean isDigit(String str) {
+            try {
+                Double.parseDouble(str);
+                return true;
+            } catch(NumberFormatException e){
+                return false;
+            }
+        }
+        @Override
+        public int compare(Point o1, Point o2) {
+            if (isDigit(o1.getNameOfPoint()) && isDigit(o2.getNameOfPoint())) {
+                if (Integer.parseInt(o1.getNameOfPoint()) > Integer.parseInt(o2.getNameOfPoint())) {
+                    return 1;
+                } else if (Integer.parseInt(o1.getNameOfPoint()) < Integer.parseInt(o2.getNameOfPoint())) {
+                    return -1;
+                } else if (Integer.parseInt(o1.getNameOfPoint()) == Integer.parseInt(o2.getNameOfPoint())) {
+                    return 0;
+                }
+            }else if (isDigit(o1.getNameOfPoint()) && !isDigit(o2.getNameOfPoint())){
+                return 1;
+            }else if (isDigit(o2.getNameOfPoint()) && !isDigit(o1.getNameOfPoint())){
+                return -1;
+            }
+            else {
+                return 0;
+            }
+            return 0;
+        }
+    };
+
 
     @GetMapping("/")
     public String home() {
@@ -183,15 +218,18 @@ public class CommissioningController {
      * @return возвращает на страницу с списком вент. систем
      */
     @GetMapping("/objects/{objectId}/vents/delete/{ventilationSystemId}")
-    public String deleteVent(@PathVariable("objectId") Long objectId, @PathVariable("ventilationSystemId") Long ventilationSystemId) {
+    public String deleteVent(@PathVariable("objectId") Long objectId,
+                             @PathVariable("ventilationSystemId") Long ventilationSystemId) {
         ventilationSystemService.deleteById(ventilationSystemId);
         return "redirect:/commissioning/objects/" + objectId + "/vents";
     }
+
     @GetMapping("/objects/{objectId}/vents/forcedelete/{ventilationSystemId}")
-    public String forceDeleteVent(@PathVariable("objectId") Long objectId, @PathVariable("ventilationSystemId") Long ventilationSystemId){
+    public String forceDeleteVent(@PathVariable("objectId") Long objectId,
+                                  @PathVariable("ventilationSystemId") Long ventilationSystemId) {
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
-        for (Point point: ventilationSystem.getPointsOfSystem()){
-            forceDeletePoint(objectId,ventilationSystemId,point.getPointId());
+        for (Point point : ventilationSystem.getPointsOfSystem()) {
+            forceDeletePoint(objectId, ventilationSystemId, point.getPointId());
         }
         ventilationSystemService.deleteById(ventilationSystemId);
         return "redirect:/commissioning/objects/" + objectId + "/vents";
@@ -206,7 +244,8 @@ public class CommissioningController {
      * @return возвращает страницу с изменением вент. системы
      */
     @GetMapping("/objects/{objectId}/vents/update/{ventilationSystemId}")
-    public String updateVent(@PathVariable("objectId") Long objectId, @PathVariable("ventilationSystemId") Long ventilationSystemId, Model model) {
+    public String updateVent(@PathVariable("objectId") Long objectId,
+                             @PathVariable("ventilationSystemId") Long ventilationSystemId, Model model) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystemToUpdate = ventilationSystemService.findById(ventilationSystemId).get();
         model.addAttribute("update_vent", ventilationSystemToUpdate);
@@ -222,7 +261,8 @@ public class CommissioningController {
      * @return возвращает на страницу со списком вент. систем
      */
     @PostMapping("/objects/{objectId}/vents/update")
-    public String updateVent(@PathVariable("objectId") Long objectId, @ModelAttribute("update_vent") VentilationSystem updatedVent) {
+    public String updateVent(@PathVariable("objectId") Long objectId,
+                             @ModelAttribute("update_vent") VentilationSystem updatedVent) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         updatedVent.setPlaceOfWork(placeOfWork);
         ventilationSystemService.updateVentilationSystem(updatedVent);
@@ -234,9 +274,10 @@ public class CommissioningController {
 
     /**
      * Получение всех точек измерения
-     * @param objectId айди объекта
+     *
+     * @param objectId            айди объекта
      * @param ventilationSystemId айди системы вентиляции
-     * @param model модель
+     * @param model               модель
      * @return страницу с списков точек измерения
      */
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points")
@@ -244,16 +285,20 @@ public class CommissioningController {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
         List<Point> pointList = pointService.findAll(ventilationSystem);
-        model.addAttribute("points", pointList);
+
+        List<Point> points = pointList.stream().sorted(pointNameComparator).toList();
+        model.addAttribute("points", points);
         model.addAttribute("vent", ventilationSystem);
         model.addAttribute("object", placeOfWork);
         return "point_main_page";
     }
+
     /**
      * Добавление точки измерения
-     * @param objectId айди объекта
+     *
+     * @param objectId            айди объекта
      * @param ventilationSystemId айди вент. системы
-     * @param model модель
+     * @param model               модель
      * @return страницу добавления точки измерения
      */
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/add")
@@ -269,15 +314,19 @@ public class CommissioningController {
         model.addAttribute("new_point", new Point());
         return "point_add_page";
     }
+
     /**
      * Добавление точки измерения
-     * @param objectId айди объекта
+     *
+     * @param objectId            айди объекта
      * @param ventilationSystemId айди вент. системы
-     * @param newPoint новая точка измерения
+     * @param newPoint            новая точка измерения
      * @return страницу с списком точек измерений
      */
     @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/add")
-    public String addPoint(@PathVariable Long objectId, @PathVariable Long ventilationSystemId, @ModelAttribute("new_point") Point newPoint) {
+    public String addPoint(@PathVariable Long objectId,
+                           @PathVariable Long ventilationSystemId,
+                           @ModelAttribute("new_point") Point newPoint) {
         PlaceOfWork mainObject = placeOfWorkService.findById(objectId).get();
         VentilationSystem mainVent = ventilationSystemService.findById(ventilationSystemId).get();
         newPoint.setVentilationSystem(mainVent);
@@ -287,33 +336,89 @@ public class CommissioningController {
         placeOfWorkService.updatePlaceOfWork(mainObject);
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
+
     /**
      * Удаление точки измерения
-     * @param objectId айди объекта
+     *
+     * @param objectId            айди объекта
      * @param ventilationSystemId айди вент. системы
-     * @param pointId айди точки измерения
+     * @param pointId             айди точки измерения
      * @return страницу с списком точек измерений
      */
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/delete/{pointId}")
-    public String deletePoint(@PathVariable("objectId") Long objectId, @PathVariable("ventilationSystemId") Long ventilationSystemId, @PathVariable Long pointId) {
+    public String deletePoint(@PathVariable("objectId") Long objectId,
+                              @PathVariable("ventilationSystemId") Long ventilationSystemId,
+                              @PathVariable Long pointId) {
         pointService.deleteById(pointId);
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
 
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/forcedelete/{pointId}")
-    public String forceDeletePoint(@PathVariable("objectId") Long objectId, @PathVariable("ventilationSystemId") Long ventilationSystemId, @PathVariable Long pointId){
+    public String forceDeletePoint(@PathVariable("objectId") Long objectId,
+                                   @PathVariable("ventilationSystemId") Long ventilationSystemId,
+                                   @PathVariable Long pointId) {
         Point point = pointService.findById(pointId).get();
-        for (Measurements meas: point.getListAirFlowRate()){
+        for (Measurements meas : point.getListAirFlowRate()) {
             measurementsService.deleteById(meas.getMeasurementsId());
         }
         pointService.deleteById(pointId);
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
 
+    @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/update/{pointId}")
+    public String updatePoint(@PathVariable("objectId") Long objectId,
+                              @PathVariable("ventilationSystemId") Long ventilationSystemId,
+                              @PathVariable("pointId") Long pointId,
+                              Model model) {
+        PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
+        VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
+        Point pointToUpdate = pointService.findById(pointId).get();
+        model.addAttribute("update_point", pointToUpdate);
+        model.addAttribute("vent", ventilationSystem);
+        model.addAttribute("object", placeOfWork);
+        model.addAttribute("circular", TypeOfHole.CIRCULAR);
+        model.addAttribute("rectangular", TypeOfHole.RECTANGULAR);
+        model.addAttribute("type_meas_inside", TypeMeasuring.INSIDE_THE_DUCT);
+        model.addAttribute("type_meas_on", TypeMeasuring.ON_THE_GRATE);
+        return "point_update_page";
+    }
+
+
+    @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/update")
+    public String updatePoint(@PathVariable("objectId") Long objectId,
+                              @PathVariable("ventilationSystemId") Long ventilationSystemId,
+                              @ModelAttribute("update_point") Point updatedPoint) {
+        VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
+        updatedPoint.setVentilationSystem(ventilationSystem);
+        pointService.updatePoint(updatedPoint);
+        return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
+    }
+
     //endregion
 
+    @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}")
+    public String getOnePoint(@PathVariable("objectId") Long objectId,
+                              @PathVariable("ventilationSystemId") Long ventilationSystemId,
+                              @PathVariable Long pointId,
+                              Model model){
+        PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
+        VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
+        Point point = pointService.findById(pointId).get();
+        model.addAttribute("vent", ventilationSystem);
+        model.addAttribute("object", placeOfWork);
+        model.addAttribute("point", point);
+        model.addAttribute("circular", TypeOfHole.CIRCULAR);
+        model.addAttribute("rectangular", TypeOfHole.RECTANGULAR);
+        model.addAttribute("type_meas_inside", TypeMeasuring.INSIDE_THE_DUCT);
+        model.addAttribute("type_meas_on", TypeMeasuring.ON_THE_GRATE);
+        return "point_page";
+    }
+
     @GetMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}/add")
-    public String addMeasure(@PathVariable("objectId") Long objectId, @PathVariable("ventilationSystemId") Long ventilationSystemId, @PathVariable Long pointId, Model model){
+    public String addMeasure(@PathVariable("objectId") Long objectId,
+                             @PathVariable("ventilationSystemId") Long ventilationSystemId,
+                             @PathVariable Long pointId,
+                             Model model) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
         Point point = pointService.findById(pointId).get();
@@ -325,7 +430,8 @@ public class CommissioningController {
     }
 
     @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}/add")
-    public String addMeasure(@PathVariable Long objectId, @PathVariable Long ventilationSystemId, @PathVariable Long pointId, @ModelAttribute("new_meas") Measurements newMeasure) {
+    public String addMeasure(@PathVariable Long objectId, @PathVariable Long ventilationSystemId,
+                             @PathVariable Long pointId, @ModelAttribute("new_meas") Measurements newMeasure) {
         PlaceOfWork mainObject = placeOfWorkService.findById(objectId).get();
         VentilationSystem mainVent = ventilationSystemService.findById(ventilationSystemId).get();
         Point mainPoint = pointService.findById(pointId).get();
@@ -335,7 +441,7 @@ public class CommissioningController {
         mainPoint.setCurrentAirVolume(newAirVolume);
         newMeasure.setPointId(mainPoint);
         mainPoint.getListAirFlowRate().add(newMeasure);
-        Double discrepancy = (double) -(100 - Math.round(newAirFlowRate/mainPoint.getAirFlowRate()*100));
+        Double discrepancy = (double) -(100 - Math.round(newAirFlowRate / mainPoint.getAirFlowRate() * 100));
         mainPoint.setDiscrepancy(discrepancy);
         measurementsService.save(newMeasure);
         pointService.updatePoint(mainPoint);

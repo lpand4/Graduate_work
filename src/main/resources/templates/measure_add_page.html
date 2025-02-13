@@ -11,7 +11,7 @@
 </head>
 <body>
 <h1 class="mt-4 md-4 text-center ">Добавление измерения</h1>
-<div class="container mt-4">
+<div class="container mt-4 md-5">
     <form th:method="POST"
           th:action="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}/add(objectId=${object.objectId},pointId=${point.pointId}, ventilationSystemId=${vent.ventilationSystemId})}"
           th:object="${new_meas}">

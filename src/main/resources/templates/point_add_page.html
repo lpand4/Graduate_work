@@ -11,7 +11,7 @@
 </head>
 <body>
 <h1 class="mt-4 md-4 text-center ">Добавление точки измерения</h1>
-<div class="container mt-4">
+<div class="container mt-4 md-5">
     <form th:method="POST"
           th:action="@{/commissioning/objects/{objectId}/vents/{ventilationSystemId}/points/add(objectId=${object.objectId}, ventilationSystemId=${vent.ventilationSystemId})}"
           th:object="${new_point}">
@@ -58,8 +58,8 @@
             <div class="row mt-5 " style="background: #866394; align-content: center;">
                 <div class="col mt-3 mb-3">
                     <div class="input-group input-group-lg">
-                        <span class="input-group-text" id="inputGroup-crossSectionalArea1" style="font-size: x-large">Диаметр</span>
-                        <input type="text" id="diameter" class="form-control" aria-label="Площадь сечения"
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea1" style="font-size: x-large">Диаметр в мм</span>
+                        <input type="text" id="diameter" class="form-control" aria-label="Диаметр"
                                aria-describedby="inputGroup-sizing-lg">
                     </div>
                 </div>
@@ -70,7 +70,7 @@
             <div class="row mt-5 " style="background: #866394; align-content: center;">
                 <div class="col mt-3 mb-3">
                     <div class="input-group input-group-lg">
-                        <span class="input-group-text" id="inputGroup-crossSectionalArea2" style="font-size: x-large">Ширина</span>
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea2" style="font-size: x-large">Ширина в мм</span>
                         <input type="text" id="width" class="form-control" aria-label="Ширина"
                                aria-describedby="inputGroup-sizing-lg">
                     </div>
@@ -79,8 +79,8 @@
             <div class="row mt-5 " style="background: #866394; align-content: center;">
                 <div class="col mt-3 mb-3">
                     <div class="input-group input-group-lg">
-                        <span class="input-group-text" id="inputGroup-crossSectionalArea3" style="font-size: x-large">Высота</span>
-                        <input type="text" id="height" class="form-control" aria-label="Высота"
+                        <span class="input-group-text" id="inputGroup-crossSectionalArea3" style="font-size: x-large">Длина в мм</span>
+                        <input type="text" id="height" class="form-control" aria-label="Длина"
                                aria-describedby="inputGroup-sizing-lg">
                     </div>
                 </div>
@@ -93,7 +93,7 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-crossSectionalArea" style="font-size: x-large">Площадь сечения</span>
-                    <input type="text" id="crossSectionalArea" th:field="*{crossSectionalArea}" th:value="0"
+                    <input type="text" id="crossSectionalArea" th:field="*{crossSectionalArea}"
                            class="form-control" aria-label="Площадь сечения" aria-describedby="inputGroup-sizing-lg"
                            readonly>
                 </div>

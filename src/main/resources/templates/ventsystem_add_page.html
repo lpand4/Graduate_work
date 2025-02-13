@@ -11,7 +11,7 @@
 </head>
 <body>
 <h1 class="mt-4 md-4 text-center ">Добавление вент. системы</h1>
-<div class="container mt-4">
+<div class="container mt-4 md-5">
     <!--/*@thymesVar id="object" type="ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.PlaceOfWork"*/-->
     <form th:method="POST" th:action="@{/commissioning/objects/{objectId}/vents/add(objectId=${object.objectId})}"
           th:object="${new_vent}">
