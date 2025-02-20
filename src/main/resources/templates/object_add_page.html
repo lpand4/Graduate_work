@@ -17,8 +17,16 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-nameOfObject" style="font-size: x-large">Наименование объекта</span>
-                    <input type="text" th:field="*{nameOfObject}" class="form-control" aria-label="Наименование объекта"
+                    <input type="text" th:field="*{nameOfObject}" id="nameOfObject" class="form-control" aria-label="Наименование объекта"
                            aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="error_message" th:if="${#fields.hasErrors('nameOfObject')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{nameOfObject}">nameOfObject Error</div>
                 </div>
             </div>
         </div>
@@ -26,8 +34,16 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-addressOfObject" style="font-size: x-large">Адрес объекта</span>
-                    <input type="text" th:field="*{addressOfObject}" class="form-control" aria-label="Адрес объекта"
+                    <input type="text" th:field="*{addressOfObject}" id="addressOfObject" class="form-control" aria-label="Адрес объекта"
                            aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="error_message" th:if="${#fields.hasErrors('addressOfObject')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{addressOfObject}">addressOfObject Error</div>
                 </div>
             </div>
         </div>
@@ -55,5 +71,8 @@
 
     h1 {
         font-weight: bold;
+    }
+    div .error_message{
+        color: red; font-size: larger; font-weight: bold
     }
 </style>

@@ -25,12 +25,28 @@
                 </div>
             </div>
         </div>
+        <div class="error_message" th:if="${#fields.hasErrors('nameOfSystem')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{nameOfSystem}">nameOfSystem Error</div>
+                </div>
+            </div>
+        </div>
         <div class="row mt-5 " style="background: #866394; align-content: center;">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-fullAirVolume" style="font-size: xx-large">Полный расход воздуха</span>
                     <input type="text" th:field="*{fullAirVolume}" id="fullAirVolume" class="form-control"
                            aria-label="Полный расход воздуха" aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="error_message" th:if="${#fields.hasErrors('fullAirVolume')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{fullAirVolume}">fullAirVolume Error</div>
                 </div>
             </div>
         </div>
@@ -60,5 +76,10 @@
 
     h1 {
         font-weight: bold;
+    }
+    .error_message{
+        color: red;
+        font-weight: bold;
+        font-size: larger;
     }
 </style>

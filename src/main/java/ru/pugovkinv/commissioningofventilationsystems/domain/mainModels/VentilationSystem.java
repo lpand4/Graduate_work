@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Data
-@Table(name = "ventilationSystem")
+@Table(name = "ventilation_system")
 public class VentilationSystem {
     /**
      * Уникальное айди вентиляционной системы

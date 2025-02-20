@@ -27,5 +27,5 @@ public class Measurements {
     /**
      * Значение скорости потока воздуха при данных условиях
      */
-    public Double valueOfMeasure;
+    private Double valueOfMeasure;
 }

@@ -1,8 +1,11 @@
 package ru.pugovkinv.commissioningofventilationsystems.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.pugovkinv.commissioningofventilationsystems.domain.enums.TypeMeasuring;
 import ru.pugovkinv.commissioningofventilationsystems.domain.enums.TypeOfHole;
@@ -10,6 +13,7 @@ import ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.Measurem
 import ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.PlaceOfWork;
 import ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.Point;
 import ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.VentilationSystem;
+import ru.pugovkinv.commissioningofventilationsystems.dto.*;
 import ru.pugovkinv.commissioningofventilationsystems.services.MeasurementsService;
 import ru.pugovkinv.commissioningofventilationsystems.services.PlaceOfWorkService;
 import ru.pugovkinv.commissioningofventilationsystems.services.PointService;
@@ -17,6 +21,7 @@ import ru.pugovkinv.commissioningofventilationsystems.services.VentilationSystem
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -26,6 +31,7 @@ public class CommissioningController {
     private final VentilationSystemService ventilationSystemService;
     private final PointService pointService;
     private final MeasurementsService measurementsService;
+    private final DtoMapper dtoMapper;
 
     /**
      * Компаратор для сортировки точек измерения по названию
@@ -90,7 +96,9 @@ public class CommissioningController {
     @GetMapping("/objects")
     public String getAllObjects(Model model) {
         List<PlaceOfWork> placeOfWorkList = placeOfWorkService.findAll();
-        model.addAttribute("objects", placeOfWorkList);
+        model.addAttribute("objects", placeOfWorkList.stream()
+                .map(dtoMapper::toPlaceOfWorkDto)
+                .collect(Collectors.toList()));
         return "object_main_page";
     }
 
@@ -102,7 +110,7 @@ public class CommissioningController {
      */
     @GetMapping("/objects/add")
     public String addObject(Model model) {
-        model.addAttribute("new_object", new PlaceOfWork());
+        model.addAttribute("new_object", new PlaceOfWorkDto());
         return "object_add_page";
     }
 
@@ -113,8 +121,11 @@ public class CommissioningController {
      * @return возвращает на страницу с списком объектов
      */
     @PostMapping("/objects/add")
-    public String addObject(@ModelAttribute("new_object") PlaceOfWork newObject) {
-        placeOfWorkService.save(newObject);
+    public String addObject(@ModelAttribute("new_object") @Validated PlaceOfWorkDto newObject, BindingResult br) {
+        if (br.hasErrors()){
+            return "object_add_page";
+        }
+        placeOfWorkService.save(dtoMapper.toPlaceOfWork(newObject));
         return "redirect:/commissioning/objects";
     }
 
@@ -156,7 +167,7 @@ public class CommissioningController {
     @GetMapping("/objects/update/{objectId}")
     public String updateObject(@PathVariable("objectId") Long id, Model model) {
         PlaceOfWork placeOfWorkToUpdate = placeOfWorkService.findById(id).get();
-        model.addAttribute("update_object", placeOfWorkToUpdate);
+        model.addAttribute("update_object", dtoMapper.toPlaceOfWorkDto(placeOfWorkToUpdate));
         return "object_update_page";
     }
 
@@ -167,8 +178,11 @@ public class CommissioningController {
      * @return возвращает на страницу с списком объектов
      */
     @PostMapping("/objects/update")
-    public String updateObject(@ModelAttribute("update_object") PlaceOfWork updatedObject) {
-        placeOfWorkService.updatePlaceOfWork(updatedObject);
+    public String updateObject(@ModelAttribute("update_object") @Validated PlaceOfWorkDto updatedObject, BindingResult br) {
+        if (br.hasErrors()){
+            return "object_update_page";
+        }
+        placeOfWorkService.updatePlaceOfWork(dtoMapper.toPlaceOfWork(updatedObject));
         return "redirect:/commissioning/objects";
     }
     //endregion
@@ -187,8 +201,9 @@ public class CommissioningController {
     public String getAllVents(@PathVariable Long objectId, Model model) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         List<VentilationSystem> ventilationSystemList = ventilationSystemService.findAll(placeOfWork);
-        model.addAttribute("vents", ventilationSystemList);
-        model.addAttribute("object", placeOfWork);
+        model.addAttribute("vents", ventilationSystemList
+                .stream().map(dtoMapper::toVentilationSystemDto).collect(Collectors.toList()));
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
         return "ventsystem_main_page";
     }
 
@@ -202,8 +217,8 @@ public class CommissioningController {
     @GetMapping("/objects/{objectId}/vents/add")
     public String addVent(@PathVariable Long objectId, Model model) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
-        model.addAttribute("new_vent", new VentilationSystem());
-        model.addAttribute("object", placeOfWork);
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
+        model.addAttribute("new_vent", new VentilationSystemDto());
         return "ventsystem_add_page";
     }
 
@@ -215,13 +230,20 @@ public class CommissioningController {
      * @return возвращает на страницу со списком вент. систем
      */
     @PostMapping("/objects/{objectId}/vents/add")
-    public String addVent(@PathVariable Long objectId, @ModelAttribute("new_vent") VentilationSystem newVent) {
+    public String addVent(@PathVariable Long objectId,
+                          @ModelAttribute("new_vent") @Validated VentilationSystemDto newVent,
+                          BindingResult br, Model model) {
         PlaceOfWork mainObject = placeOfWorkService.findById(objectId).get();
+        if (br.hasErrors()){
+            model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(mainObject));
+            return "ventsystem_add_page";
+        }
         newVent.setPlaceOfWork(mainObject);
-        mainObject.getVentilationSystems().add(newVent);
+        mainObject.getVentilationSystems().add(dtoMapper.toVentilationSystem(newVent));
         placeOfWorkService.updatePlaceOfWork(mainObject);
-        ventilationSystemService.save(newVent);
+        ventilationSystemService.save(dtoMapper.toVentilationSystem(newVent));
         return "redirect:/commissioning/objects/" + objectId + "/vents";
+
     }
 
     /**
@@ -262,8 +284,8 @@ public class CommissioningController {
                              @PathVariable("ventilationSystemId") Long ventilationSystemId, Model model) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystemToUpdate = ventilationSystemService.findById(ventilationSystemId).get();
-        model.addAttribute("update_vent", ventilationSystemToUpdate);
-        model.addAttribute("object", placeOfWork);
+        model.addAttribute("update_vent", dtoMapper.toVentilationSystemDto(ventilationSystemToUpdate));
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
         return "ventsystem_update_page";
     }
 
@@ -276,10 +298,15 @@ public class CommissioningController {
      */
     @PostMapping("/objects/{objectId}/vents/update")
     public String updateVent(@PathVariable("objectId") Long objectId,
-                             @ModelAttribute("update_vent") VentilationSystem updatedVent) {
+                             @ModelAttribute("update_vent") @Validated VentilationSystemDto updatedVent,
+                             BindingResult br, Model model) {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
+        if (br.hasErrors()){
+            model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
+            return "ventsystem_update_page";
+        }
         updatedVent.setPlaceOfWork(placeOfWork);
-        ventilationSystemService.updateVentilationSystem(updatedVent);
+        ventilationSystemService.updateVentilationSystem(dtoMapper.toVentilationSystem(updatedVent));
         return "redirect:/commissioning/objects/" + objectId + "/vents";
     }
     //endregion
@@ -301,9 +328,9 @@ public class CommissioningController {
         List<Point> pointList = pointService.findAll(ventilationSystem);
 
         List<Point> points = pointList.stream().sorted(pointNameComparator).toList();
-        model.addAttribute("points", points);
-        model.addAttribute("vent", ventilationSystem);
-        model.addAttribute("object", placeOfWork);
+        model.addAttribute("points", points.stream().map(dtoMapper::toPointDto).collect(Collectors.toList()));
+        model.addAttribute("vent", dtoMapper.toVentilationSystemDto(ventilationSystem));
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
         return "point_main_page";
     }
 
@@ -323,9 +350,9 @@ public class CommissioningController {
         model.addAttribute("rectangular", TypeOfHole.RECTANGULAR);
         model.addAttribute("type_meas_inside", TypeMeasuring.INSIDE_THE_DUCT);
         model.addAttribute("type_meas_on", TypeMeasuring.ON_THE_GRATE);
-        model.addAttribute("vent", ventilationSystem);
-        model.addAttribute("object", placeOfWork);
-        model.addAttribute("new_point", new Point());
+        model.addAttribute("vent", dtoMapper.toVentilationSystemDto(ventilationSystem));
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
+        model.addAttribute("new_point", new PointDto());
         return "point_add_page";
     }
 
@@ -340,12 +367,22 @@ public class CommissioningController {
     @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/add")
     public String addPoint(@PathVariable Long objectId,
                            @PathVariable Long ventilationSystemId,
-                           @ModelAttribute("new_point") Point newPoint) {
+                           @ModelAttribute("new_point") @Validated PointDto newPoint,
+                           BindingResult br,Model model) {
         PlaceOfWork mainObject = placeOfWorkService.findById(objectId).get();
         VentilationSystem mainVent = ventilationSystemService.findById(ventilationSystemId).get();
+        if (br.hasErrors()){
+            model.addAttribute("circular", TypeOfHole.CIRCULAR);
+            model.addAttribute("rectangular", TypeOfHole.RECTANGULAR);
+            model.addAttribute("type_meas_inside", TypeMeasuring.INSIDE_THE_DUCT);
+            model.addAttribute("type_meas_on", TypeMeasuring.ON_THE_GRATE);
+            model.addAttribute("vent", dtoMapper.toVentilationSystemDto(mainVent));
+            model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(mainObject));
+            return "point_add_page";
+        }
         newPoint.setVentilationSystem(mainVent);
-        mainVent.getPointsOfSystem().add(newPoint);
-        pointService.save(newPoint);
+        mainVent.getPointsOfSystem().add(dtoMapper.toPoint(newPoint));
+        pointService.save(dtoMapper.toPoint(newPoint));
         ventilationSystemService.updateVentilationSystem(mainVent);
         placeOfWorkService.updatePlaceOfWork(mainObject);
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
@@ -404,9 +441,9 @@ public class CommissioningController {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
         Point pointToUpdate = pointService.findById(pointId).get();
-        model.addAttribute("update_point", pointToUpdate);
-        model.addAttribute("vent", ventilationSystem);
-        model.addAttribute("object", placeOfWork);
+        model.addAttribute("update_point", dtoMapper.toPointDto(pointToUpdate));
+        model.addAttribute("vent", dtoMapper.toVentilationSystemDto(ventilationSystem));
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
         model.addAttribute("circular", TypeOfHole.CIRCULAR);
         model.addAttribute("rectangular", TypeOfHole.RECTANGULAR);
         model.addAttribute("type_meas_inside", TypeMeasuring.INSIDE_THE_DUCT);
@@ -425,10 +462,21 @@ public class CommissioningController {
     @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/update")
     public String updatePoint(@PathVariable("objectId") Long objectId,
                               @PathVariable("ventilationSystemId") Long ventilationSystemId,
-                              @ModelAttribute("update_point") Point updatedPoint) {
+                              @ModelAttribute("update_point") @Validated PointDto updatedPoint,
+                              BindingResult br, Model model) {
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
+        PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
+        if (br.hasErrors()){
+            model.addAttribute("vent", dtoMapper.toVentilationSystemDto(ventilationSystem));
+            model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
+            model.addAttribute("circular", TypeOfHole.CIRCULAR);
+            model.addAttribute("rectangular", TypeOfHole.RECTANGULAR);
+            model.addAttribute("type_meas_inside", TypeMeasuring.INSIDE_THE_DUCT);
+            model.addAttribute("type_meas_on", TypeMeasuring.ON_THE_GRATE);
+            return "point_update_page";
+        }
         updatedPoint.setVentilationSystem(ventilationSystem);
-        pointService.updatePoint(updatedPoint);
+        pointService.updatePoint(dtoMapper.toPoint(updatedPoint));
         return "redirect:/commissioning/objects/" + objectId + "/vents/" + ventilationSystemId + "/points";
     }
 
@@ -449,9 +497,9 @@ public class CommissioningController {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
         Point point = pointService.findById(pointId).get();
-        model.addAttribute("vent", ventilationSystem);
-        model.addAttribute("object", placeOfWork);
-        model.addAttribute("point", point);
+        model.addAttribute("vent", dtoMapper.toVentilationSystemDto(ventilationSystem));
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
+        model.addAttribute("point", dtoMapper.toPointDto(point));
         model.addAttribute("circular", TypeOfHole.CIRCULAR);
         model.addAttribute("rectangular", TypeOfHole.RECTANGULAR);
         model.addAttribute("type_meas_inside", TypeMeasuring.INSIDE_THE_DUCT);
@@ -480,10 +528,10 @@ public class CommissioningController {
         PlaceOfWork placeOfWork = placeOfWorkService.findById(objectId).get();
         VentilationSystem ventilationSystem = ventilationSystemService.findById(ventilationSystemId).get();
         Point point = pointService.findById(pointId).get();
-        model.addAttribute("vent", ventilationSystem);
-        model.addAttribute("object", placeOfWork);
-        model.addAttribute("point", point);
-        model.addAttribute("new_meas", new Measurements());
+        model.addAttribute("vent", dtoMapper.toVentilationSystemDto(ventilationSystem));
+        model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(placeOfWork));
+        model.addAttribute("point", dtoMapper.toPointDto(point));
+        model.addAttribute("new_meas", new MeasurementsDto());
         return "measure_add_page";
     }
 
@@ -498,19 +546,26 @@ public class CommissioningController {
      */
     @PostMapping("/objects/{objectId}/vents/{ventilationSystemId}/points/{pointId}/add")
     public String addMeasure(@PathVariable Long objectId, @PathVariable Long ventilationSystemId,
-                             @PathVariable Long pointId, @ModelAttribute("new_meas") Measurements newMeasure) {
+                             @PathVariable Long pointId, @ModelAttribute("new_meas") @Validated MeasurementsDto newMeasure,
+                             BindingResult br, Model model) {
         PlaceOfWork mainObject = placeOfWorkService.findById(objectId).get();
         VentilationSystem mainVent = ventilationSystemService.findById(ventilationSystemId).get();
         Point mainPoint = pointService.findById(pointId).get();
-        Double newAirFlowRate = newMeasure.getValueOfMeasure();
+        if (br.hasErrors()){
+            model.addAttribute("vent", dtoMapper.toVentilationSystemDto(mainVent));
+            model.addAttribute("object", dtoMapper.toPlaceOfWorkDto(mainObject));
+            model.addAttribute("point", dtoMapper.toPointDto(mainPoint));
+            return "measure_add_page";
+        }
+        Double newAirFlowRate = Double.valueOf(newMeasure.getValueOfMeasure());
         Double newAirVolume = (double) Math.round(newAirFlowRate * 3600 * mainPoint.getCrossSectionalArea() * 10.0) / 10;
         mainPoint.setCurrentAirFlowRate(newAirFlowRate);
         mainPoint.setCurrentAirVolume(newAirVolume);
         newMeasure.setPointId(mainPoint);
-        mainPoint.getListAirFlowRate().add(newMeasure);
+        mainPoint.getListAirFlowRate().add(dtoMapper.toMeasurements(newMeasure));
         Double discrepancy = (double) -(100 - Math.round(newAirFlowRate / mainPoint.getAirFlowRate() * 100));
         mainPoint.setDiscrepancy(discrepancy);
-        measurementsService.save(newMeasure);
+        measurementsService.save(dtoMapper.toMeasurements(newMeasure));
         pointService.updatePoint(mainPoint);
         ventilationSystemService.updateVentilationSystem(mainVent);
         placeOfWorkService.updatePlaceOfWork(mainObject);

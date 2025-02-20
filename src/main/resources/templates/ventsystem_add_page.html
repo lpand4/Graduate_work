@@ -12,7 +12,6 @@
 <body>
 <h1 class="mt-4 md-4 text-center ">Добавление вент. системы</h1>
 <div class="container mt-4 md-5">
-    <!--/*@thymesVar id="object" type="ru.pugovkinv.commissioningofventilationsystems.domain.mainModels.PlaceOfWork"*/-->
     <form th:method="POST" th:action="@{/commissioning/objects/{objectId}/vents/add(objectId=${object.objectId})}"
           th:object="${new_vent}">
         <input type="hidden" th:field="*{placeOfWork}" id="placeOfWork">
@@ -20,8 +19,16 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-nameOfSystem" style="font-size: x-large">Наименование вент. системы</span>
-                    <input type="text" th:field="*{nameOfSystem}" class="form-control" aria-label="Наименование объекта"
+                    <input type="text" id="nameOfSystem" th:field="*{nameOfSystem}" class="form-control" aria-label="Наименование объекта"
                            aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="error_message" th:if="${#fields.hasErrors('nameOfSystem')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{nameOfSystem}">nameOfSystem Error</div>
                 </div>
             </div>
         </div>
@@ -29,8 +36,16 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-fullAirVolume" style="font-size: x-large">Полный расход воздуха(м3/ч)</span>
-                    <input type="text" th:field="*{fullAirVolume}" class="form-control"
+                    <input type="text" if="fullAirVolume" th:field="*{fullAirVolume}" class="form-control"
                            aria-label="Полный расход воздуха" aria-describedby="inputGroup-sizing-lg">
+                </div>
+            </div>
+        </div>
+        <div class="error_message" th:if="${#fields.hasErrors('fullAirVolume')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{fullAirVolume}">fullAirVolume Error</div>
                 </div>
             </div>
         </div>
@@ -58,5 +73,8 @@
 
     h1 {
         font-weight: bold;
+    }
+    div .error_message{
+        color: red; font-size: larger; font-weight: bold
     }
 </style>

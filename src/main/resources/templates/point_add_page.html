@@ -22,12 +22,19 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-nameOfPoint" style="font-size: x-large">Наименование точки измерения</span>
-                    <input type="text" th:field="*{nameOfPoint}" class="form-control"
+                    <input type="text" id="nameOfPoint" th:field="*{nameOfPoint}" class="form-control"
                            aria-label="Наименование точки измерения" aria-describedby="inputGroup-sizing-lg">
                 </div>
             </div>
         </div>
-
+        <div class="error_message" th:if="${#fields.hasErrors('nameOfPoint')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{nameOfPoint}">nameOfPoint Error</div>
+                </div>
+            </div>
+        </div>
 
         <div class="row mt-5" style="background: #866394; ">
             <div class="col mt-3 mb-3">
@@ -99,6 +106,14 @@
                 </div>
             </div>
         </div>
+        <div class="error_message" th:if="${#fields.hasErrors('crossSectionalArea')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{crossSectionalArea}">crossSectionalArea Error</div>
+                </div>
+            </div>
+        </div>
 
 
         <div class="row mt-5 " style="background: #866394; align-content: center;">
@@ -110,6 +125,14 @@
                 </div>
             </div>
         </div>
+        <div class="error_message" th:if="${#fields.hasErrors('airVolume')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{airVolume}">airVolume Error</div>
+                </div>
+            </div>
+        </div>
         <div class="row mt-5 " style="background: #866394; align-content: center;">
             <button class="btn btn-success" type="button" onclick="doMathAirflow();" style="font-weight: bold;">Посчитать скорость воздуха</button>
             <div class="col mt-3 mb-3">
@@ -117,6 +140,14 @@
                     <span class="input-group-text" id="inputGroup-airFlowRate" style="font-size: x-large">Скорость воздуха по проекту</span>
                     <input type="text" id="airFlowRate" th:field="*{airFlowRate}" class="form-control"
                            aria-label="Скорость воздуха по проекту" aria-describedby="inputGroup-sizing-lg" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="error_message" th:if="${#fields.hasErrors('airFlowRate')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{airFlowRate}">airFlowRate Error</div>
                 </div>
             </div>
         </div>
@@ -199,5 +230,10 @@
 
     h1 {
         font-weight: bold;
+    }
+    .error_message{
+        color: red;
+        font-weight: bold;
+        font-size: larger;
     }
 </style>

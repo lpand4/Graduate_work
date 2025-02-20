@@ -19,12 +19,19 @@
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text" id="inputGroup-valueOfMeasure" style="font-size: xx-large">Значение измерения в м/с</span>
-                    <input type="text" th:field="*{valueOfMeasure}" class="form-control"
+                    <input type="text" id="valueOfMeasure" th:field="*{valueOfMeasure}" class="form-control"
                            aria-label="Значение измерения в м/с" aria-describedby="inputGroup-sizing-lg">
                 </div>
             </div>
         </div>
-
+        <div class="error_message" th:if="${#fields.hasErrors('valueOfMeasure')}">
+            <div class="row justify-content-center">
+                <div class="col-3 align-middle"></div>
+                <div class="col-9 align-self-center">
+                    <div th:errors="*{valueOfMeasure}">valueOfMeasure Error</div>
+                </div>
+            </div>
+        </div>
         <div class="row mt-5 " style="background: #866394; align-content: center;">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">
@@ -68,5 +75,10 @@
 
     h1 {
         font-weight: bold;
+    }
+    .error_message{
+        color: red;
+        font-weight: bold;
+        font-size: larger;
     }
 </style>
