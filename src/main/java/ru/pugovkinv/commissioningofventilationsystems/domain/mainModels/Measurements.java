@@ -14,11 +14,12 @@ public class Measurements {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "measurement_id")
     private Long measurementsId;
     /**
      * Точка измерения, к которое принадлежит определенное измерение
      */
-    @ManyToOne
+    @ManyToOne @JoinColumn(name = "point_id")
     private Point pointId;
     /**
      * Примечание к измерению

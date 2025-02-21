@@ -24,7 +24,7 @@ public class Point {
     /**
      * Вентиляционная система к которой принадлежит точка измерения
      */
-    @ManyToOne
+    @ManyToOne @JoinColumn(name = "ventilation_system_id")
     private VentilationSystem ventilationSystem;
     /**
      * Название точки измерения(Например Этаж 1, т. 1)

@@ -17,6 +17,7 @@ public class PlaceOfWork {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "object_id")
     private Long objectId;
     /**
      * Название объекта

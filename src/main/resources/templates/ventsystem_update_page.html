@@ -15,7 +15,6 @@
     <form th:method="POST" th:action="@{/commissioning/objects/{objectId}/vents/update(objectId=${object.objectId})}"
           th:object="${update_vent}">
         <input type="hidden" th:field="*{ventilationSystemId}" id="ventilationSystemId">
-        <input type="hidden" th:field="*{pointsOfSystem}" id="pointsOfSystem">
         <div class="row mt-5" style="background: #866394; ">
             <div class="col mt-3 mb-3">
                 <div class="input-group input-group-lg">

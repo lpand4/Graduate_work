@@ -17,6 +17,7 @@ public class VentilationSystem {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ventilation_system_id")
     private Long ventilationSystemId;
     /**
      * Название системы (Например, В1 - коридоры корпуса А)
@@ -34,6 +35,6 @@ public class VentilationSystem {
     /**
      * Рабочий объект на котором находится данная система (Например, РУДН)
      */
-    @ManyToOne
+    @ManyToOne @JoinColumn(name = "object_id")
     private PlaceOfWork placeOfWork;
 }
